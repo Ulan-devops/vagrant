@@ -1,0 +1,19 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "centos/7"
+
+  config.vm.box_check_update = false
+
+  config.vm.provision "ansible" do |ansible|
+    ansible.playbook = "playbook.yml"
+  end
+
+  config.vm.provision "shell", inline: <<-SHELL
+    sudo yum update -y
+    sudo yum install httpd -y
+    sudo systemctl start httpd
+    sudo systemctl enable httpd
+  SHELL
+end
